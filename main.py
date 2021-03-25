@@ -21,76 +21,29 @@ def main(argv):
 
 def solve_knapsack_backtracking(max_weight, items):
     items = sort_array(items)
-    items = [(0,0)] + items
-    print(items)
     max_profit = recursive_backtracking(0, 0, max_weight, items)
     return max_profit
 
 def recursive_backtracking(max_profit, current_profit, available_weight, items):
-    item_profit, item_weight = items[0]
-    other_items = items[1:]
-
-    print(items[0])
-    print(other_items)
-    print(max_profit, current_profit, available_weight, items)
-    
-    if item_weight > available_weight:
-        print('impossible')
+    if len(items) == 0:
         return current_profit
 
+    item_profit, item_weight = items[0]
     new_profit = current_profit + item_profit
     new_available_weight = available_weight - item_weight
 
-    print(new_profit, max_profit)
-
-    if len(other_items) == 0:
-        return new_profit if new_profit > max_profit else max_profit
-
-    # print(new_profit, max_profit)
-
-    result_with_next_item = recursive_backtracking(max_profit, new_profit, new_available_weight, other_items)
-    if result_with_next_item > max_profit:
-        max_profit = result_with_next_item
+    if new_available_weight >= 0:
+        result_adding_item = recursive_backtracking(max_profit, new_profit, new_available_weight, items[1:])
+        if result_adding_item > max_profit:
+            max_profit = result_adding_item
     
-    if (len(other_items) > 1):
-        result_without_next_item = recursive_backtracking(max_profit, new_profit, new_available_weight, other_items[1:])
-        if result_without_next_item > max_profit:
-            max_profit = result_without_next_item
-
+    result_not_adding_item = recursive_backtracking(max_profit, current_profit, available_weight, items[1:])
+    if result_not_adding_item > max_profit:
+        max_profit = result_not_adding_item
+    
     return max_profit
 
-# def recursive_backtracking(max_profit, current_profit, available_weight, items):
-#     item_profit, item_weight = items[0]
-#     other_items = items[1:]
-
-#     print(items[0])
-#     print(other_items)
-#     print(max_profit, current_profit, max_weight, current_weight, items)
-#     if current_weight > available_weight:
-#         print('impossible')
-#         return 0
-
-#     new_profit = current_profit + item_profit
-#     new_weight = current_weight + item_weight
-
-#     print(new_profit, max_profit)
-
-#     if len(other_items) == 0:
-#         return new_profit if new_profit > max_profit else max_profit
-
-#     # print(new_profit, max_profit)
-
-#     result_with_current_item = recursive_backtracking(max_profit, new_profit, max_weight, new_weight, other_items)
-#     if result_with_current_item > max_profit:
-#         max_profit = result_with_current_item
     
-#     result_without_current_item = recursive_backtracking(max_profit, current_profit, max_weight, current_weight, other_items)
-#     if result_without_current_item > max_profit:
-#         max_profit = result_with_current_item
-
-#     return max_profit
-
-
 
 
 def solve_knapsack_branch_and_bound(weight, items):
@@ -116,8 +69,8 @@ def initialize_problem(input_file):
         lines = lines[1:]
         for line in lines:
             item_val, item_weight = line.split(' ')
-            items += [(int(item_val.strip()), int(item_weight.strip()))]
-    return int(weight.strip()), items
+            items += [(float(item_val.strip()), float(item_weight.strip()))]
+    return float(weight.strip()), items
     
 
 def get_startup_arguments(argv):
