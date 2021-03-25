@@ -1,0 +1,11 @@
+Teste;Nome;Tempo Backtracking;Tempo Branch-and-Bound;Resultado
+f1_l-d_kp_10_269;Paula Mara Ribeiro;0.000591;0.000394;295
+f2_l-d_kp_20_878;Paula Mara Ribeiro;0.613125;0.021199;1024
+f3_l-d_kp_4_20;Paula Mara Ribeiro;0.000024;0.000042;35
+f4_l-d_kp_4_11;Paula Mara Ribeiro;0.000023;0.000042;23
+f5_l-d_kp_15_375;Paula Mara Ribeiro;0.016199;0.001468;481.069368
+f6_l-d_kp_10_60;Paula Mara Ribeiro;0.000473;0.001141;52
+f7_l-d_kp_7_50;Paula Mara Ribeiro;0.000081;0.000075;107
+f8_l-d_kp_23_10000;Paula Mara Ribeiro;3.223959;4.970066;9767
+f9_l-d_kp_5_80;Paula Mara Ribeiro;0.000030;0.000054;130
+f10_l-d_kp_20_879;Paula Mara Ribeiro;0.607368;0.021160;1025
