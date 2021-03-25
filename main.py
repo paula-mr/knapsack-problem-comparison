@@ -1,22 +1,22 @@
 import sys
 import os
-from datetime import datetime
+import time
 
 
 def main(argv):
     input_file, algorithm = get_startup_arguments(argv)
     weight, items = initialize_problem(input_file)
     
-    start_time = datetime.now()
+    start_time = time.process_time()
     if algorithm == 'bt':
         result = solve_knapsack_backtracking(weight, items)
     else:
         result = solve_knapsack_branch_and_bound(weight, items)
-    end_time = datetime.now()
+    end_time = time.process_time()
 
-    diff = start_time - end_time
+    diff = end_time - start_time
 
-    print(result, diff.microseconds)
+    print(result, diff)
 
 
 def solve_knapsack_backtracking(max_weight, items):
@@ -58,7 +58,6 @@ def bound(node, n, weight, items):
         total_weight += items[j][1]
         j += 1
     
-    print('a', total_weight, profit_bound)
     if j < n:
         profit_bound += (weight - current_weight) * items[j][0]/items[j][1]
     
@@ -69,7 +68,7 @@ def solve_knapsack_branch_and_bound(weight, items):
     items = sort_array(items)
     n = len(items)
     max_profit = 0
-    root = (-1, 0, 0) # level, profit, weight
+    root = (-1, 0, 0, 0) # level, profit, weight, bound
     queue = [root]
 
     while queue:
@@ -79,8 +78,10 @@ def solve_knapsack_branch_and_bound(weight, items):
         node_level = node[0]
         node_profit = node[1]
         node_weight = node[2]
+        node_bound = node[3]
 
-        if node_level == n-1:
+
+        if node_level == n-1 or node_bound < max_profit:
             continue
         
         new_node_level = node_level+1
@@ -92,18 +93,16 @@ def solve_knapsack_branch_and_bound(weight, items):
             max_profit = new_node_profit
         new_node_bound = bound((new_node_level, new_node_profit, new_node_weight), n, weight, items)
 
-        print (new_node_bound, max_profit)
         if new_node_bound > max_profit:
-            queue = [(new_node_level, new_node_profit, new_node_weight)] + queue
+            queue = [(new_node_level, new_node_profit, new_node_weight, new_node_bound)] + queue
         
         # without taking the item        
         new_node_weight = node_weight
         new_node_profit = node_profit
         new_node_bound = bound((new_node_level, new_node_profit, new_node_weight), n, weight, items)
 
-        print (new_node_bound, max_profit)
         if new_node_bound > max_profit:
-            queue = [(new_node_level, new_node_profit, new_node_weight)] + queue
+            queue = [(new_node_level, new_node_profit, new_node_weight, new_node_bound)] + queue
 
     return max_profit
 
